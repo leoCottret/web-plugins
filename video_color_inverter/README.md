@@ -5,7 +5,7 @@
  - the plugin is toggable by 
     - using a shorcut - CTRL + ALT + x _(case sensitive)_
     - clicking on the browser extension
- - the state of the extension is shown by the icon used:
+ - the state of the extension is shown by the icon:
    - ![hurted-eye-icon](https://user-images.githubusercontent.com/71428793/221570708-b8a77de3-7f73-4331-8cff-14a9956c06b8.png)    ![hurted-eye-icon-off](https://user-images.githubusercontent.com/71428793/221570860-168b258c-6e1d-485b-b612-a5c723e9f826.png)
    -  ON     OFF
 
