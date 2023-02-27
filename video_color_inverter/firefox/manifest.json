@@ -1,0 +1,31 @@
+{
+	"manifest_version": 2,
+    "name": "Video Color Inverter",
+    "version": "1.0",
+    "description": "Togglable button to invert color of videos. To reduce eyestrain induced by some videos.",
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "permissions": [
+        "<all_urls>",
+        "webNavigation",
+        "storage",
+        "activeTab"
+    ],
+    "browser_action": {
+        "default_icon": "hurted-eye-icon.png",
+        "default_title": "Video Color Inverter"
+    },
+    "icons": {
+        "32": "hurted-eye-icon.png",
+        "48": "hurted-eye-icon-48.png",
+        "64": "hurted-eye-icon-64.png"
+    }
+}
