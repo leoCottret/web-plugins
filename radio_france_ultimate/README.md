@@ -14,3 +14,5 @@ Up arrow -> Increase volume
 Down arrow -> Decrease volume
 
 Should work for every radio, except "Mouv'" that, for now, has some malfunctionning buttons.
+
+Get it for firefox: https://addons.mozilla.org/en-US/firefox/addon/radio-france-ultimate
