@@ -10,7 +10,7 @@
    -  ON     OFF
 
 ## DEMO
-- Pressing the shortcut a few time while in full screen
+- Pressing the shortcut a few time while in full screen:
 
 
 https://user-images.githubusercontent.com/71428793/221579057-697659dc-914c-4982-a934-a49ddf3cb705.mp4
