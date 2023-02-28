@@ -1,9 +1,8 @@
 {
-	"manifest_version": 2,
+    "manifest_version": 2,
     "name": "Radio France Ultimate",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Add shortcuts for the Radio France player",
-    
     "content_scripts": [
         {
             "matches": ["*://*.radiofrance.fr/*"],
