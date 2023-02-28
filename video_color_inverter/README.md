@@ -19,5 +19,5 @@ https://user-images.githubusercontent.com/71428793/221579057-697659dc-914c-4982-
 
 _Example from https://www.udemy.com/course/spring-boot-and-spring-framework-tutorial-for-beginners_
 
-## Incredible! Where do I get it?
-Get it for firefox: ![firefox](https://addons.mozilla.org/en-GB/firefox/addon/video-color-inverter)
+## Extension link(s)
+Get it for ![firefox](https://addons.mozilla.org/en-GB/firefox/addon/video-color-inverter)
