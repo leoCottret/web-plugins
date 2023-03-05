@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
     "name": "Video Color Inverter",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Toggable button to invert color of videos. To reduce eyestrain induced by some videos.",
     "background": {
         "scripts": ["background.js"],
