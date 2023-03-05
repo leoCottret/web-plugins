@@ -43,7 +43,8 @@ setInterval(() => {
 
 document.addEventListener("keydown", function(e) {
 	// CTRL + ALT + X -> toggle extension on/off
-    if (e.ctrlKey  &&  e.altKey  &&  e.key === "x") {
+	// on Mac, if CTRL + ALT + X are pressed, e.key==="="(?), so check .code==="KeyX" instead
+    if (e.ctrlKey  &&  e.altKey  && e.code === "KeyX") {
         browser.runtime.sendMessage({
 	    	message: "Toggle VCI!",
 	  });
