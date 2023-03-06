@@ -1,0 +1,60 @@
+h2 {
+  text-align: center;
+}
+
+html, body {
+  width: 370px;
+  background-color: #111;
+  color: lightgreen;
+}
+body  {
+  border: solid lightgreen 2px;
+  padding: 30px;
+}
+
+/* Website row */
+.website-row {
+  padding: 0px 5px 5px 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.website-row:hover .website-row-remove-button  {
+   visibility: visible;
+}
+
+.website-row-text {
+  align-self: center;
+}
+
+.website-row-remove-button {
+   padding: 3px 10px;
+   border: solid lightgreen 2px;
+   cursor: pointer;
+   color: #000;
+   background-color: lightgreen;
+   visibility: hidden;
+   margin-right: 10px;
+}
+
+/* Add wesite */
+#add-website-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+#add-website-name-input {
+  width: 130px;
+  border: solid lightgreen 2px;
+}
+
+#add-website-time-limit-input {
+  width: 160px;
+  border: solid lightgreen 2px;
+}
+
+#add-website-button {
+  padding: 5px 10px;
+  border: solid lightgreen 2px;
+  cursor: pointer;
+}

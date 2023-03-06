@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+    "name": "Keep Working!",
+    "version": "1.0",
+    "description": "Limit the time you can pass on websites you choose!",
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "permissions": [
+        "storage",
+        "activeTab"
+    ],
+    "browser_action": {
+        "default_icon": "hurted-eye-icon.png",
+        "default_title": "Keep Working!",
+        "default_popup": "popup/pop_up.html"
+    },
+    "icons": {
+        "32": "hurted-eye-icon.png",
+        "48": "hurted-eye-icon-48.png",
+        "64": "hurted-eye-icon-64.png"
+    }
+}
