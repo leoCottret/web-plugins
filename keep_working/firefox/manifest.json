@@ -15,7 +15,7 @@
     ],
     "permissions": [
         "storage",
-        "activeTab"
+        "tabs"
     ],
     "browser_action": {
         "default_icon": "hurted-eye-icon.png",

@@ -28,7 +28,6 @@ function cE(parent, tag, text=null, cclass=null, id=null) {
 			}
 		} else {
 			console.error("cclass should be of type string or array!")
-			console.log(text)
 		}
 	}
 	if (id) {
@@ -37,21 +36,34 @@ function cE(parent, tag, text=null, cclass=null, id=null) {
 	return parent.appendChild(newElement);
 }
 
+// timeWasteWebsites functions, to avoid editing it directly
+function setTWW(v, updateLocalStorage=false) {
+	timeWasteWebsites = v;
+	console.log(v, updateLocalStorage)
+	if (updateLocalStorage) {
+		browser.storage.local.set({["keep_working"]: JSON.stringify(v)});
+	}
+}
+function getTWW() {
+	return timeWasteWebsites;
+}
+function pushTWW(websiteObject) {
+	timeWasteWebsites.push(websiteObject);
+	setTWW(timeWasteWebsites, true);
+}
+
 // add new website time limit
 function addLimit() {
 	let websiteName = qS("#add-website-name-input").value;
 	let websiteTimeLimit = qS("#add-website-time-limit-input").value;
-	timeWasteWebsites.push({name: websiteName, timeLimit: websiteTimeLimit, timeCurrent: 0});
-	browser.storage.local.set({["keep_working"]: JSON.stringify(timeWasteWebsites)})
+	pushTWW({name: websiteName, timeLimit: websiteTimeLimit, timeCurrent: 0});
 	refreshTimeWasteWebsites();
 }
 
 function removeLimit(websiteNameToRemove) {
-	timeWasteWebsites = timeWasteWebsites.filter( w => {
+	setTWW(getTWW().filter( w => {
 		return w.name != websiteNameToRemove;
-	})
-	browser.storage.local.set({["keep_working"]: JSON.stringify(timeWasteWebsites)})
-	refreshTimeWasteWebsites();
+	}), true);
 }
 
 function filterTimeLimitInput() {
@@ -63,16 +75,11 @@ function filterTimeLimitInput() {
 
 }
 
-function refreshTimeWasteWebsites() {
-	browser.storage.local.get({["keep_working"]: 1}).then((r) => {
-		// https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage
-		if (r.keep_working !== 1) {
-			timeWasteWebsites = JSON.parse(r.keep_working);
-		}
-
+// recreate the pop ui list, to get updated time from background.js, add a new limit etc.
+function refreshPopUpUI() {
 		let websiteListE = qS(".website-list");
 		websiteListE.innerHTML = "";
-		for (let w of timeWasteWebsites) {
+		for (let w of getTWW()) {
 			let websiteRowE = cE(websiteListE, "div", null, "website-row");
 			// delete limit on "minus button" click
 			cE(websiteRowE, "div", "-", "remove-website-button").addEventListener('click', (e) => {
@@ -82,6 +89,16 @@ function refreshTimeWasteWebsites() {
 			cE(websiteRowE, "div", w.name, ["website-row-text", "website-row-name"]);
 			cE(websiteRowE, "div", w.timeCurrent+"/"+w.timeLimit, ["website-row-text", "website-row-time"]);
 		}
+}
+
+// refresh the limits list (the TWW var), then update the PopUp UI to match the list
+function refreshTimeWasteWebsites() {
+	browser.storage.local.get({["keep_working"]: 1}).then((r) => {
+		// https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage
+		if (r.keep_working !== 1) {
+			setTWW(JSON.parse(r.keep_working));
+		}
+		refreshPopUpUI();
 	})
 }
 
@@ -102,26 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
-
-
-
-
-/*
-// get the toggle button
-let toggleExtensionCheckbox = qS("input[name=video-color-inverter-toggle]");
-
-// if the user clicked on the toggle button, modify the storage value accordingly, so video_color_inverter enable/disable the video color inversion
-toggleExtensionCheckbox.addEventListener('change', function() {
-	if (this.checked) {
-		browser.storage.local.set({["video_color_converter_toggle"]: 1})
-	} else {
-		browser.storage.local.set({["video_color_converter_toggle"]: 0})
-	}
+// the one best way to exchange data between pop_up.js, background.js and content.js. Update the local storage and listen on local storage change events
+// TODO add small delay between refresh here, to avoid possible double reload
+browser.storage.onChanged.addListener((changes, area) => {
+	const changedItems = Object.keys(changes);
+	if (area == "local" && changedItems.filter(i => i == "keep_working").length > 0) {
+		console.log("refresh from pop up")
+		refreshTimeWasteWebsites();
+  	}
 });
-
-// will toggle on the button if it has been toggled on by the user before, or it's the first time the extension is enabled
-browser.storage.local.get({["video_color_converter_toggle"]: 0}).then((r) => {
-	toggleExtensionCheckbox.checked = r.video_color_converter_toggle
-})
-*/

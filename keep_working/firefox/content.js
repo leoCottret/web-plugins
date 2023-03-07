@@ -1,67 +1,45 @@
-timeWasteWebsites = [ "linkedin.com", "youtube.com" ];
+// refresh TWW data
+function refreshTWW() {
+	browser.storage.local.get({["keep_working"]: 1}).then((r) => {
+		if (r.keep_working !== 1) {
+			timeWasteWebsites = JSON.parse(r.keep_working);
+		}
+	})
+}
 
-for (let w of timeWasteWebsites) {
-	if (window.location.hostname.includes(w)) {
-		setInterval(() => {
+// kill a page (TODO improve it with a clean html page, and maybe a less brutal way to kill the page)
+function killPage() {
+	let i = 0;
+	let killInterval = setInterval(() => {
 			document.body.innerHTML = "Stay focused!";
 			window.stop();
-		}, 500);
-	}
+			i++;
+			if (i > 5) {
+				clearinterval(killInterval);
+			}
+	}, 500);
 }
 
-
-
-
-
-/*// invert the videos color
-function invertVideosColor(toggle) {
-	// if the extension is enabled from the icon menu
-	if (toggle) {
-		// and the videos color are not inverted yet
-		if (!document.querySelector(".video-color-inverter-magic")) {
-			// invert the videos color
-			videoColorInverterStyleRule = document.createElement("style");
-			videoColorInverterStyleRule.classList.add("video-color-inverter-magic");
-			document.head.appendChild(videoColorInverterStyleRule);
-			videoColorInverterStyleRule.sheet.insertRule("video { -webkit-filter: invert(100%); filter: invert(100%);}", 0);
-		} else {
-			videoColorInverterStyleRule.disabled = false;
-		}
-	// if the extention isn't enabled from the icon menu
-	} else {
-		// and the videos color are inverted
-		if (document.querySelector(".video-color-inverter-magic")) {
-			// remove the inversion
-			videoColorInverterStyleRule.disabled = true;
-
+// checks if the current page needs to be killed because the user has already wasted enough time on this hostname
+function killPageIfNeeded() {
+	refreshTWW();
+	for (let w of timeWasteWebsites) {
+		if (window.location.hostname.includes(w.name) && w.timeCurrent >= w.timeLimit) {
+			killPage();
 		}
 	}
-}
-
-// store the style rule that reverts the video color
-var videoColorInverterStyleRule = null
-// store the last toggle state in a variable, to avoid executing the invertVideosColor at every interval (will keep the script lightweight)
-let lastToggleState = null;
-
-
-setInterval(() => {
-	browser.storage.local.get({["video_color_inverter_toggle"]: 0}).then((r) => {
-		// r.video_color_inverter_toggle is never null, = 0 or 1
-		if (lastToggleState != r.video_color_inverter_toggle || lastToggleState == null) {
-			invertVideosColor(r.video_color_inverter_toggle);
-			lastToggleState = r.video_color_inverter_toggle;
-		}
-	});
-}, 1000)
+} 
 
 
 
-document.addEventListener("keydown", function(e) {
-	// CTRL + ALT + X -> toggle extension on/off
-	// on Mac, if CTRL + ALT + X are pressed, e.key==="="(?), so check .code==="KeyX" instead
-    if (e.ctrlKey  &&  e.altKey  && e.code === "KeyX") {
-        browser.runtime.sendMessage({
-	    	message: "Toggle VCI!",
-	  });
-    }
-});*/
+// MAIN
+var timeWasteWebsites = [];
+killPageIfNeeded();
+
+// the one best way to exchange data between pop_up.js, background.js and content.js. Update the local storage and listen on local storage change events
+browser.storage.onChanged.addListener((changes, area) => {
+	const changedItems = Object.keys(changes);
+	if (area == "local" && changedItems.filter(i => i == "keep_working").length > 0) {
+		killPageIfNeeded();
+  	}
+});
