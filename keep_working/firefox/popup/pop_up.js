@@ -1,6 +1,15 @@
 // just a shorter query selector
-function qS(selector) {
-	return document.querySelector(selector);
+function qS(selector, parent=null) {
+	let element = null;
+	if (parent) {
+		element = parent.querySelector(selector);
+	} else {
+		element = document.querySelector(selector);
+	}
+	if (!element) {
+		console.error("element with selector " + selector + " doesn't exist under parent -> ", parent);
+	}
+	return element;
 }
 
 // add an html element to the dom
@@ -10,7 +19,17 @@ function cE(parent, tag, text=null, cclass=null, id=null) {
 		newElement.appendChild(document.createTextNode(text));
 	}
 	if (cclass) {
-		newElement.classList.add(cclass);
+		if (typeof cclass === 'string') {
+			newElement.classList.add(cclass);
+		// assuming array, otherwise error will be thrown
+		} else if (cclass.constructor === Array) {
+			for (let c of cclass) {
+				newElement.classList.add(c);
+			}
+		} else {
+			console.error("cclass should be of type string or array!")
+			console.log(text)
+		}
 	}
 	if (id) {
 		newElement.id = id;
@@ -22,37 +41,64 @@ function cE(parent, tag, text=null, cclass=null, id=null) {
 function addLimit() {
 	let websiteName = qS("#add-website-name-input").value;
 	let websiteTimeLimit = qS("#add-website-time-limit-input").value;
-	timeWasteWebsites.push({name: websiteName, timeLimit: websiteTimeLimit});
+	timeWasteWebsites.push({name: websiteName, timeLimit: websiteTimeLimit, timeCurrent: 0});
 	browser.storage.local.set({["keep_working"]: JSON.stringify(timeWasteWebsites)})
 	refreshTimeWasteWebsites();
+}
+
+function removeLimit(websiteNameToRemove) {
+	timeWasteWebsites = timeWasteWebsites.filter( w => {
+		return w.name != websiteNameToRemove;
+	})
+	browser.storage.local.set({["keep_working"]: JSON.stringify(timeWasteWebsites)})
+	refreshTimeWasteWebsites();
+}
+
+function filterTimeLimitInput() {
+	let timeLimitInputE = qS("#add-website-time-limit-input");
+	if (timeLimitInputE.value) {
+		// replace non digit characters
+		timeLimitInputE.value = timeLimitInputE.value.replace(/\D/g,'');
+	}
+
 }
 
 function refreshTimeWasteWebsites() {
 	browser.storage.local.get({["keep_working"]: 1}).then((r) => {
 		// https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage
-		timeWasteWebsites = JSON.parse(r.keep_working);
+		if (r.keep_working !== 1) {
+			timeWasteWebsites = JSON.parse(r.keep_working);
+		}
 
 		let websiteListE = qS(".website-list");
 		websiteListE.innerHTML = "";
 		for (let w of timeWasteWebsites) {
 			let websiteRowE = cE(websiteListE, "div", null, "website-row");
-			cE(websiteRowE, "div", "-", "website-row-remove-button");
-			cE(websiteRowE, "div", w.name, "website-row-text");
-			cE(websiteRowE, "div", w.timeLimit, "website-row-text");
+			// delete limit on "minus button" click
+			cE(websiteRowE, "div", "-", "remove-website-button").addEventListener('click', (e) => {
+				removeLimit(qS(".website-row-name", e.target.parentElement).textContent)
+			});
+
+			cE(websiteRowE, "div", w.name, ["website-row-text", "website-row-name"]);
+			cE(websiteRowE, "div", w.timeCurrent+"/"+w.timeLimit, ["website-row-text", "website-row-time"]);
 		}
 	})
 }
 
 
-var timeWasteWebsites = null;
+var timeWasteWebsites = [];
 refreshTimeWasteWebsites();
 
 // to avoid script-src csp error
 document.addEventListener('DOMContentLoaded', () => {
-    let addWebsiteE = qS("#add-website-button");
+	// click + button event, to add a new website time limit
     // onClick's logic below:
-    addWebsiteE.addEventListener('click', () => {
+    qS("#add-website-button").addEventListener('click', () => {
         addLimit();
+    }); 
+	// change value of the time limit input field, to remove non digit values
+    qS("#add-website-time-limit-input").addEventListener("change", () => {
+        filterTimeLimitInput();
     });
 });
 

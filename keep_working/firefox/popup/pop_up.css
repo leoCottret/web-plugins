@@ -19,7 +19,7 @@ body  {
   justify-content: space-between;
 }
 
-.website-row:hover .website-row-remove-button  {
+.website-row:hover .remove-website-button  {
    visibility: visible;
 }
 
@@ -27,7 +27,7 @@ body  {
   align-self: center;
 }
 
-.website-row-remove-button {
+.remove-website-button {
    padding: 3px 10px;
    border: solid lightgreen 2px;
    cursor: pointer;
