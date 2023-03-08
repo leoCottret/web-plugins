@@ -5,7 +5,7 @@
     "description": "Toggable button to invert color of videos. To reduce eyestrain induced by some videos.",
     "browser_specific_settings": {
         "gecko": {
-            "id": "9f9f51d6-f924-4a3b-beba-fad822223be2"
+            "id": "{9f9f51d6-f924-4a3b-beba-fad822223be2}"
         }
     },
     "background": {
