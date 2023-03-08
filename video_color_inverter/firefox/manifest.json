@@ -1,8 +1,13 @@
 {
 	"manifest_version": 2,
     "name": "Video Color Inverter",
-    "version": "1.1",
+    "version": "1.2",
     "description": "Toggable button to invert color of videos. To reduce eyestrain induced by some videos.",
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "sudo@video_color_inverter_firefox"
+        }
+    },
     "background": {
         "scripts": ["background.js"],
         "persistent": true

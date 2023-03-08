@@ -1,6 +1,6 @@
 
 // get the toggle button
-let toggleExtensionCheckbox = document.querySelector("input[name=video-color-inverter-toggle]");
+let toggleExtensionCheckbox = document.querySelector("input[name=video-color-inverter-toggle]")
 
 // if the user clicked on the toggle button, modify the storage value accordingly, so video_color_inverter enable/disable the video color inversion
 toggleExtensionCheckbox.addEventListener('change', function() {

@@ -46,7 +46,7 @@ document.addEventListener("keydown", function(e) {
 	// on Mac, if CTRL + ALT + X are pressed, e.key==="="(?), so check .code==="KeyX" instead
     if (e.ctrlKey  &&  e.altKey  && e.code === "KeyX") {
         browser.runtime.sendMessage({
-	    	message: "Toggle VCI!",
+	    	message: "Toggle VCI!"
 	  });
     }
 });
