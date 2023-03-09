@@ -11,7 +11,7 @@ function refreshTWW() {
 function killPage() {
 	let i = 0;
 	let killInterval = setInterval(() => {
-			document.body.innerHTML = "Stay focused!";
+			document.body.innerHTML = "Keep working!";
 			window.stop();
 			i++;
 			if (i > 5) {
