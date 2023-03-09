@@ -103,6 +103,8 @@ function refreshTimeWasteWebsites() {
 }
 
 
+// MAIN
+
 var timeWasteWebsites = [];
 refreshTimeWasteWebsites();
 

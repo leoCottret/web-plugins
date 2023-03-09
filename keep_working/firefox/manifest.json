@@ -7,6 +7,11 @@
         "scripts": ["background.js"],
         "persistent": true
     },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "sudo@keep_working_firefox"
+        }
+    },
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
@@ -18,13 +23,13 @@
         "tabs"
     ],
     "browser_action": {
-        "default_icon": "hurted-eye-icon.png",
+        "default_icon": "sledgehammer-32.png",
         "default_title": "Keep Working!",
         "default_popup": "popup/pop_up.html"
     },
     "icons": {
-        "32": "hurted-eye-icon.png",
-        "48": "hurted-eye-icon-48.png",
-        "64": "hurted-eye-icon-64.png"
+        "32": "sledgehammer-32.png",
+        "48": "sledgehammer-48.png",
+        "64": "sledgehammer-64.png"
     }
 }
