@@ -58,3 +58,8 @@ body  {
   border: solid lightgreen 2px;
   cursor: pointer;
 }
+
+.rewards-container {
+  display: flex;
+  margin-top: 20px;
+}

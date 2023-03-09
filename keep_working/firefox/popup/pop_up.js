@@ -1,3 +1,4 @@
+// UTILITY FUNCIONS
 // just a shorter query selector
 function qS(selector, parent=null) {
 	let element = null;
@@ -36,10 +37,10 @@ function cE(parent, tag, text=null, cclass=null, id=null) {
 	return parent.appendChild(newElement);
 }
 
+// GET/SET
 // timeWasteWebsites functions, to avoid editing it directly
 function setTWW(v, updateLocalStorage=false) {
 	timeWasteWebsites = v;
-	console.log(v, updateLocalStorage)
 	if (updateLocalStorage) {
 		browser.storage.local.set({["keep_working"]: JSON.stringify(v)});
 	}
@@ -52,6 +53,20 @@ function pushTWW(websiteObject) {
 	setTWW(timeWasteWebsites, true);
 }
 
+function setRewards(v, updateLocalStorage=false) {
+	rewards = v;
+	if (updateLocalStorage) {
+		browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(v)});
+	}
+}
+function getRewards(fromStorage) {
+	rewards = v;
+	if (updateLocalStorage) {
+		browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(v)});
+	}
+}
+
+// OTHER
 // add new website time limit
 function addLimit() {
 	let websiteName = qS("#add-website-name-input").value;
@@ -66,6 +81,7 @@ function removeLimit(websiteNameToRemove) {
 	}), true);
 }
 
+// remove non digit values
 function filterTimeLimitInput() {
 	let timeLimitInputE = qS("#add-website-time-limit-input");
 	if (timeLimitInputE.value) {
@@ -102,11 +118,20 @@ function refreshTimeWasteWebsites() {
 	})
 }
 
+// rewards are rarely changed, so their content can be generated and displayed only once when the pop up is openned
+function refreshRewards() {
+	browser.storage.local.get({["keep_working_rewards"]: 1}).then((r) => {
+		let rewards = JSON.parse(r.keep_working_rewards);
+		qS("#points").textContent = "Points: " + rewards.points;
+	})
+}
+
 
 // MAIN
 
 var timeWasteWebsites = [];
 refreshTimeWasteWebsites();
+refreshRewards();
 
 // to avoid script-src csp error
 document.addEventListener('DOMContentLoaded', () => {
@@ -128,5 +153,8 @@ browser.storage.onChanged.addListener((changes, area) => {
 	if (area == "local" && changedItems.filter(i => i == "keep_working").length > 0) {
 		console.log("refresh from pop up")
 		refreshTimeWasteWebsites();
-  	}
+  	} else if (changedItems.filter(i => i == "keep_working_rewards").length > 0) {
+		refreshRewards();
+	}
 });
+
