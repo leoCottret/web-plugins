@@ -64,19 +64,19 @@ function manageTabs(incrementTime=false) {
 function updateNextDailyUpdateDate() {
 	let tempTWW = timeWasteWebsites.map(l => {l.timeCurrent = 0; return l});
 	setTWW(tempTWW, true);
-	options.nextDailyUpdate = new Date().setTime(new Date().getTime() + LIMIT_RESET_TIME);
+	options.nextDailyUpdate = new Date().setTime(new Date().getTime() + LIMIT_RESET_TIME_CYCLE);
 	browser.storage.local.set({["keep_working_options"]: JSON.stringify(options)});
 }
 
 // update rewards, for now will only add 1 point
-function updateRewards() {
-	rewards.points += 1;
+function updateRewards(newPoints) {
+	rewards.points += newPoints;
 	browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(rewards)});
 }
 
 // set default options and save them to storage, executed once on addon installation
 function initStorage() {
-	let options = {nextDailyUpdate: new Date().getTime() + LIMIT_RESET_TIME};
+	let options = {nextDailyUpdate: new Date().getTime() + LIMIT_RESET_TIME_CYCLE};
 	browser.storage.local.set({["keep_working_options"]: JSON.stringify(options)})
 	let rewards = {points: 0};
 	browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(rewards)})
@@ -84,9 +84,12 @@ function initStorage() {
 
 // reset the time passed on all hostnames with a limit, happens once a day
 function manageDailyUpdate() {
+	// if current date is higher than scheduled daily update
 	if (new Date() > new Date(options.nextDailyUpdate)) {
+		// add points for every days, even if user didn't use its browser for a few days (that's still a win right?)
+		const newPoints = Math.ceil((new Date().getTime()-new Date(options.nextDailyUpdate).getTime())/LIMIT_RESET_TIME_CYCLE)
 		updateNextDailyUpdateDate();
-		updateRewards();
+		updateRewards(newPoints);
 	}
 }
 
@@ -94,7 +97,7 @@ function manageDailyUpdate() {
 
 // MAIN
 // how much time between each time limit reset, in ms -> default 1 day, changed for debug
-const LIMIT_RESET_TIME = 1000 * 60 * 60 * 24;
+const LIMIT_RESET_TIME_CYCLE = 1000 * 60 * 60 * 24;
 // the main interval speed -> default 1 min, also changed for debug 
 const INTERVAL_CYCLE = 60 * 1000;
 var timeWasteWebsites = [];
@@ -109,6 +112,8 @@ browser.storage.local.get({["keep_working_options"]: 0}).then((r) => {
 	// important here, needed to populate the TWW variable
 	refreshTWW(true);
 	refreshOptions();
+	// delay the first daily update enough to be executed after every functions above
+	setTimeout(() => { manageDailyUpdate()}, 1);
 
 	setInterval(() => {
 		manageTabs(true);
@@ -131,6 +136,10 @@ browser.storage.local.get({["keep_working_options"]: 0}).then((r) => {
 	});
 });
 
+/*browser.runtime.onDisabled.addListener((info) => {
+  console.log(`${info.name} was disabled`);
+});
 
+*/
 
 
