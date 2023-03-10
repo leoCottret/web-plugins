@@ -24,7 +24,6 @@ function refreshTWW(updateLocalStorage=false) {
 		}
 	})
 }
-
 function refreshOptions(updateLocalStorage=false) {
 	browser.storage.local.get({["keep_working_options"]: 1}).then((r) => {
 		if (r.keep_working_options !== 1) {
@@ -76,9 +75,9 @@ function updateRewards(newPoints) {
 
 // set default options and save them to storage, executed once on addon installation
 function initStorage() {
-	let options = {nextDailyUpdate: new Date().getTime() + LIMIT_RESET_TIME_CYCLE};
+	options = {nextDailyUpdate: new Date().getTime() + LIMIT_RESET_TIME_CYCLE};
 	browser.storage.local.set({["keep_working_options"]: JSON.stringify(options)})
-	let rewards = {points: 0};
+	rewards = {points: 0};
 	browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(rewards)})
 }
 
@@ -112,6 +111,7 @@ browser.storage.local.get({["keep_working_options"]: 0}).then((r) => {
 	// important here, needed to populate the TWW variable
 	refreshTWW(true);
 	refreshOptions();
+	refreshRewards();
 	// delay the first daily update enough to be executed after every functions above
 	setTimeout(() => { manageDailyUpdate()}, 1);
 
