@@ -11,11 +11,12 @@ addButtonsInterval = setInterval(() => {
 
 		// get static buttons
 		player = document.querySelector('#player');
-		minus10Element = player.querySelector('.backward');
-		plus10Element = player.querySelector('.forward');
-		audio = document.querySelector('audio');
-		// sometimes the audio is used, sometimes the video (eg on direct page)
-		video = document.querySelector('video');
+		minus15Element = player.querySelector('.minus > button');
+		plus30Element = player.querySelector('.plus > button');
+		playElement = player.querySelector('[data-testid="mainButton"]');
+		volumeElement = player.querySelector(".VolumeSetting-control > input")
+		currentVolume = Number(volumeElement.getAttribute('aria-valuenow')) // fix first volume value that is randomly set to 100
+		volumeElement.value = currentVolume
 
 		// add key events
 		window.addEventListener('keydown', (event) => {
@@ -27,21 +28,21 @@ addButtonsInterval = setInterval(() => {
 			  	event.stopPropagation(); // disables the bubbling phase listeners
 				
 				if (event.key == supportedKeys.ArrowLeft) {
-					minus10Element.click();
+					minus15Element.click();
 				// space bar
 				} else if (event.key == supportedKeys.Space) {
-					playElement = player.querySelector('.playing');
-					pauseElement = player.querySelector('.paused') || player.querySelector('.stopped');
-
-					(playElement) ? playElement.click() : pauseElement.click();
+					playElement.click();
 				} else if (event.key == supportedKeys.ArrowRight) {
-					plus10Element.click();
-				} else if (event.key == supportedKeys.ArrowUp) {
-					(audio.volume + 0.1 > 1) ? audio.volume = 1 : audio.volume += 0.1;
-					(video.volume + 0.1 > 1) ? video.volume = 1 : video.volume += 0.1;
-				} else if (event.key == supportedKeys.ArrowDown) {
-					(audio.volume - 0.1 < 0) ? audio.volume = 0 : audio.volume -= 0.1;
-					(video.volume - 0.1 < 0) ? video.volume = 0 : video.volume -= 0.1;
+					plus30Element.click();
+				} else if (event.key == supportedKeys.ArrowUp || event.key == supportedKeys.ArrowDown) {
+					if (event.key == supportedKeys.ArrowUp) {
+						(currentVolume + 10 > 100) ? currentVolume = 100 : currentVolume += 10;
+					} else {
+						(currentVolume - 10 < 0) ? currentVolume = 0 : currentVolume -= 10;
+					}
+					volumeElement.value = currentVolume
+					volumeElement.dispatchEvent(new Event('change'))
+					volumeElement.dispatchEvent(new Event('change'))
 				}
 			}
 		}, true);
