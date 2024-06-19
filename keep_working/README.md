@@ -1,4 +1,4 @@
- - a web plugin to limit the time on websites you feel are waisting your time
+ - a web plugin to limit the time on websites you feel are wasting your time
 # DEMO
 - Click on the plugin icon, you get a pop up
 
