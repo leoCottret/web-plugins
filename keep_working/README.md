@@ -5,13 +5,13 @@
 ![image](https://github.com/leoCottret/web-plugins/assets/71428793/f0b0b6d7-ade0-4d01-bf17-9459b7fcf531)
 
 - Here you can see that I wasted 1 minute on reddit, and can still spend 15-1 = 14 minutes on it
-- Once you wasted enough time on a website, the page will be replaced every minutes by a dull "Keep Working" message
+- Once you wasted enough time on a website, the page will be replaced every minute by a dull "Keep Working" message
   
 ![image](https://github.com/leoCottret/web-plugins/assets/71428793/e2c05572-ba1e-4f2b-8bb0-35edd399dedd)
 
-- PS: the check happens every minutes, so if you close and reopen a tab you can still take a glance at it
+- PS: the check happens every minute, so if you close and reopen a tab you can still take a glance at it
 ## Adding a new rule
-- Type your website in the left field, the time in minutes in the right field, the click the + sign. The new rule will be added
+- Type your website in the left field, the time in minutes in the right field, then click the + sign. The new rule will be added
 
 ![image](https://github.com/leoCottret/web-plugins/assets/71428793/e39d9ec1-c8e4-43e4-91c3-9d01df7e2798)
 
@@ -25,4 +25,4 @@
 
 
 ## Extension link(s)
-Get it for firefox (TODO)
+Get it for [firefox](https://addons.mozilla.org/en-US/firefox/addon/keep-working/)
