@@ -1,4 +1,4 @@
-// UTILITY FUNCIONS
+// UTILITY FUNCTIONS
 // just a shorter query selector
 function qS(selector, parent=null) {
 	let element = null;
@@ -91,7 +91,7 @@ function filterTimeLimitInput() {
 
 }
 
-// recreate the pop ui list, to get updated time from background.js, add a new limit etc.
+// recreate the pop up ui list, to get updated time from background.js, add a new limit etc.
 function refreshPopUpUI() {
 		let websiteListE = qS(".website-list");
 		websiteListE.innerHTML = "";
@@ -135,7 +135,7 @@ refreshRewards();
 
 // to avoid script-src csp error
 document.addEventListener('DOMContentLoaded', () => {
-	// click + button event, to add a new website time limit
+    // click + button event, to add a new website time limit
     // onClick's logic below:
     qS("#add-website-button").addEventListener('click', () => {
         addLimit();
