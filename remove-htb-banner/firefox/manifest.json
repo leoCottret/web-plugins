@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "htbanneremove",
+    "version": "1.0",
+    "description": "Remove HTB MFA banner",
+    "content_scripts": [
+        {
+            "matches": ["*://*.academy.hackthebox.com/*"],
+            "js": ["hackthebox.js"]
+        }
+    ],
+    "permissions": [
+        "activeTab",
+        "*://*.academy.hackthebox.com/*"
+    ]
+}
