@@ -10,6 +10,7 @@
 ![image](https://github.com/leoCottret/web-plugins/assets/71428793/e2c05572-ba1e-4f2b-8bb0-35edd399dedd)
 
 - PS: the check happens every minute, so if you close and reopen a tab you can still take a glance at it
+- PPS: The "Points" is a gamification feature that isn't fully fleshed out yet, for now it's just the number of days since the installation. It's a reward for using a productivity plugin (yay!)
 ## Adding a new rule
 - Type your website in the left field, the time in minutes in the right field, then click the + sign. The new rule will be added
 
@@ -22,7 +23,6 @@
 - Click on the minus sign to the left of the website name
   
 ![image](https://github.com/leoCottret/web-plugins/assets/71428793/835cf0ca-cffd-4859-89d2-c6c7729fb19e)
-
 
 ## Extension link(s)
 Get it for [firefox](https://addons.mozilla.org/en-US/firefox/addon/keep-working/)
