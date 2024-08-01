@@ -11,8 +11,37 @@ function getTWW() {
 }
 
 
-// eg https://youtube.com
-function getRootUrl(url) {
+// EG 1 https://old.reddit.com > reddit.com
+// EG 2 http://google.com > google.com
+function getRootDomain(url) {
+	// trim everything after extension (eg .com)
+	let rootUrl = url.replace(/^(.*\/\/[^\/?#]*).*$/,"$1")
+	// remove the protocol
+	let n = rootUrl.lastIndexOf('/');
+	rootUrl = rootUrl.substring(n === -1 ? 0 : n + 1)
+	// count the number of parts in the url left
+	let parts = rootUrl.split('.'), partsCount = parts.length  
+
+	if (partsCount > 2) {
+		// If more than two parts, it's likely a subdomain
+		// e.g., "old.reddit.com" -> "reddit.com"
+		return `${parts[partsCount - 2]}.${parts[partsCount - 1]}`;
+	} else if (partsCount === 2) {
+		// If exactly two parts, it's already a root domain
+		// e.g., "google.com"
+		return rootUrl;
+	} else {
+		// If less than two parts, returns the full url
+		// eg: about:config
+		if (debug) {
+			console.info('getRootDomain() raw url, rootUrl - url without dot?')
+			console.info(url)
+			console.info(rootUrl)
+		}
+	  return url;
+  }
+
+
 	return url.replace(/^(.*\/\/[^\/?#]*).*$/,"$1");
 }
 
@@ -45,9 +74,13 @@ function refreshRewards(updateLocalStorage=false) {
 function manageTabs(incrementTime=false) {
 	browser.tabs.query({currentWindow: true, active: true}).then((r) => {
 		refreshTWW();
+		const rootDomain = getRootDomain(r[0].url)
+		if (debug) {
+			console.info('manageTabs() current root domain')
+			console.info(rootDomain)
+		}
 		for (let w of getTWW()) {
-			// if current page share the same hostname as a hostname with limit
-			if (getRootUrl(r[0].url).includes(w.name)) {
+			if (rootDomain == w.name) {
 				let foundIndex = getTWW().findIndex(i => i.name == w.name);
 				let tempTWW = getTWW();
 				if (incrementTime) {
@@ -122,7 +155,9 @@ const INTERVAL_CYCLE = 60 * 1000;
 var timeWasteWebsites = [];
 var options = {};
 var rewards = {};
-var debug = 1
+var debug = 0
+
+
 // best way to be sure the local storage is correctly initated -> verify it is, browser.runtime.onInstalled is not the tool for this
 browser.storage.local.get({["keep_working_options"]: 0}).then((r) => {
 	// if storage isn't set

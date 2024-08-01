@@ -26,3 +26,5 @@
 
 ## Extension link(s)
 Get it for [firefox](https://addons.mozilla.org/en-US/firefox/addon/keep-working/)
+
+<!-- build new zip for kw -> `zip build/kw_1_1.zip -r * -x "build/*" "ressources/*" @` -->
