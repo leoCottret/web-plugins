@@ -23,6 +23,11 @@ body  {
    visibility: visible;
 }
 
+#pre-cron-text {
+  display: flex;
+  align-items: center;
+}
+
 .website-row-text {
   align-self: center;
 }
@@ -38,7 +43,7 @@ body  {
 }
 
 /* Add wesite */
-#add-website-container {
+#add-website-container, #change-cron-container {
   display: flex;
   justify-content: space-between;
 }
@@ -53,7 +58,7 @@ body  {
   border: solid lightgreen 2px;
 }
 
-#add-website-button {
+#add-website-button, #change-cron-button {
   padding: 5px 10px;
   border: solid lightgreen 2px;
   cursor: pointer;

@@ -13,7 +13,7 @@ function getTWW() {
 
 // eg https://youtube.com
 function getRootUrl(url) {
-  return url.replace(/^(.*\/\/[^\/?#]*).*$/,"$1");
+	return url.replace(/^(.*\/\/[^\/?#]*).*$/,"$1");
 }
 
 function refreshTWW(updateLocalStorage=false) {
@@ -59,11 +59,15 @@ function manageTabs(incrementTime=false) {
 	})
 }
 
-// update the date at which the time passed on all hostnames with a limit are set to 0
+// reset every current time passed on websites to 0, set next daily update date to current time + 24 hours
 function updateNextDailyUpdateDate() {
 	let tempTWW = timeWasteWebsites.map(l => {l.timeCurrent = 0; return l});
 	setTWW(tempTWW, true);
-	options.nextDailyUpdate = new Date().setTime(new Date().getTime() + LIMIT_RESET_TIME_CYCLE);
+	// remove seconds/milliseconds, to avoid shifting the precise set cron (hours+minutes) little by little
+	let lastDailyUpdate = new Date(options.nextDailyUpdate)
+	lastDailyUpdate.setSeconds(0)
+	lastDailyUpdate.setMilliseconds(0)
+	options.nextDailyUpdate = new Date().setTime(lastDailyUpdate.getTime() + LIMIT_RESET_TIME_CYCLE);
 	browser.storage.local.set({["keep_working_options"]: JSON.stringify(options)});
 }
 
@@ -75,7 +79,12 @@ function updateRewards(newPoints) {
 
 // set default options and save them to storage, executed once on addon installation
 function initStorage() {
-	options = {nextDailyUpdate: new Date().getTime() + LIMIT_RESET_TIME_CYCLE};
+	let currentDate = new Date()
+	currentDate.setHours(8)
+	currentDate.setMinutes(0)
+	currentDate.setSeconds(0)
+	currentDate.setMilliseconds(0)
+	options = {nextDailyUpdate: currentDate.getTime() + LIMIT_RESET_TIME_CYCLE};
 	browser.storage.local.set({["keep_working_options"]: JSON.stringify(options)})
 	rewards = {points: 0};
 	browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(rewards)})
@@ -84,12 +93,23 @@ function initStorage() {
 // reset the time passed on all hostnames with a limit, happens once a day
 function manageDailyUpdate() {
 	// if current date is higher than scheduled daily update
-	if (new Date() > new Date(options.nextDailyUpdate)) {
-		// add points for every days, even if user didn't use its browser for a few days (that's still a win right?)
+	if (new Date() >= new Date(options.nextDailyUpdate)) {
+		// add points for every days, even if user didn't use its web browser for a few days (that's still a win right?)
 		const newPoints = Math.ceil((new Date().getTime()-new Date(options.nextDailyUpdate).getTime())/LIMIT_RESET_TIME_CYCLE)
 		updateNextDailyUpdateDate();
 		updateRewards(newPoints);
 	}
+	// just some handy debug printing
+	if (debug) {
+		setTimeout(() => {
+			console.info('manageDailyUpdate() timeWasteWebsites, options, nextDailyUpdate (human readable), rewards');
+			console.info(timeWasteWebsites);
+			console.info(options);
+			console.info(new Date(options.nextDailyUpdate));
+			console.info(rewards);
+		},1000);
+	}
+
 }
 
 
@@ -102,6 +122,7 @@ const INTERVAL_CYCLE = 60 * 1000;
 var timeWasteWebsites = [];
 var options = {};
 var rewards = {};
+var debug = 1
 // best way to be sure the local storage is correctly initated -> verify it is, browser.runtime.onInstalled is not the tool for this
 browser.storage.local.get({["keep_working_options"]: 0}).then((r) => {
 	// if storage isn't set
@@ -127,19 +148,14 @@ browser.storage.local.get({["keep_working_options"]: 0}).then((r) => {
 		if (area == "local") {
 			if (changedItems.filter(i => i == "keep_working").length > 0) {
 				manageTabs();
-		  	} else if (changedItems.filter(i => i == "keep_working_options").length > 0) {
-		  		refreshOptions();
-		  	} else if (changedItems.filter(i => i == "keep_working_rewards").length > 0) {
-		  		refreshRewards();
-		  	}
+			} else if (changedItems.filter(i => i == "keep_working_options").length > 0) {
+				refreshOptions();
+			} else if (changedItems.filter(i => i == "keep_working_rewards").length > 0) {
+				refreshRewards();
+			}
 		}
 	});
 });
 
-/*browser.runtime.onDisabled.addListener((info) => {
-  console.log(`${info.name} was disabled`);
-});
-
-*/
 
 

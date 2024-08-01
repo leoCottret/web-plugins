@@ -53,18 +53,23 @@ function pushTWW(websiteObject) {
 	setTWW(timeWasteWebsites, true);
 }
 
-function setRewards(v, updateLocalStorage=false) {
-	rewards = v;
+
+function getCron() {
+	return cron;
+}
+
+function setCron(v, updateLocalStorage=false) {
+	cron = v
+	let [hours, minutes] = v.split(':'), nextDate = new Date()
+	nextDate.setHours(hours)
+	nextDate.setMinutes(minutes)
+	nextDate.setSeconds(0)
+	nextDate.setMilliseconds(0)
 	if (updateLocalStorage) {
-		browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(v)});
+		browser.storage.local.set({["keep_working_options"]: JSON.stringify({nextDailyUpdate: nextDate.getTime()})});
 	}
 }
-function getRewards(fromStorage) {
-	rewards = v;
-	if (updateLocalStorage) {
-		browser.storage.local.set({["keep_working_rewards"]: JSON.stringify(v)});
-	}
-}
+
 
 // OTHER
 // add new website time limit
@@ -75,10 +80,17 @@ function addLimit() {
 	refreshTimeWasteWebsites();
 }
 
+// remove website time limit
 function removeLimit(websiteNameToRemove) {
 	setTWW(getTWW().filter( w => {
 		return w.name != websiteNameToRemove;
 	}), true);
+}
+
+// set a new cron time
+function changeCronTime() {
+	let changeCronInputE = qS("#change-cron-input");
+	setCron(changeCronInputE.value, true)
 }
 
 // remove non digit values
@@ -118,18 +130,42 @@ function refreshTimeWasteWebsites() {
 	})
 }
 
+function refreshCronUI() {
+	// display current cron in pop up
+	let changeCronE = qS("#change-cron-input");
+	let [hours, minutes] = getCron().split(':').map(Number)
+	formattedTime = String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+	changeCronE.value = formattedTime
+}
+
+function refreshCron() {
+	browser.storage.local.get({["keep_working_options"]: 1}).then((r) => {
+		if (r.keep_working_options !== 1) {
+			let nextDailyUpdate = new Date(JSON.parse(r.keep_working_options).nextDailyUpdate)
+			let [hours, minutes] = [nextDailyUpdate.getHours(), nextDailyUpdate.getMinutes()]
+			setCron(String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0'))
+		}
+		refreshCronUI();
+	})
+
+}
+
 // rewards are rarely changed, so their content can be generated and displayed only once when the pop up is openned
 function refreshRewards() {
 	browser.storage.local.get({["keep_working_rewards"]: 1}).then((r) => {
-		let rewards = JSON.parse(r.keep_working_rewards);
+		rewards = JSON.parse(r.keep_working_rewards);
 		qS("#points").textContent = "Points: " + rewards.points;
 	})
 }
 
 
+
+
 // MAIN
 
 var timeWasteWebsites = [];
+var cron = '06:00';
+refreshCron();
 refreshTimeWasteWebsites();
 refreshRewards();
 
@@ -144,6 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
     qS("#add-website-time-limit-input").addEventListener("change", () => {
         filterTimeLimitInput();
     });
+    // add listener to change the time at wich the website counters reset
+    qS("#change-cron-button").addEventListener('click', () => {
+        changeCronTime();
+    }); 
+
+
 });
 
 // the one best way to exchange data between pop_up.js, background.js and content.js. Update the local storage and listen on local storage change events
@@ -151,10 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
 browser.storage.onChanged.addListener((changes, area) => {
 	const changedItems = Object.keys(changes);
 	if (area == "local" && changedItems.filter(i => i == "keep_working").length > 0) {
-		console.log("refresh from pop up")
 		refreshTimeWasteWebsites();
   	} else if (changedItems.filter(i => i == "keep_working_rewards").length > 0) {
 		refreshRewards();
+	} else if (changedItems.filter(i => i == "keep_working_options").length > 0) {
+		refreshCron();
 	}
 });
 
