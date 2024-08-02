@@ -31,7 +31,7 @@
 
 ## About notifications warning
 - **When there are less than 3 minutes left on a root domain, you will get a huge pop up in your current tab that will slowly move on your screen**
-- **It is intentionnally intrusive. This is to inform you that, if you have unsaved "work" in your current tab, you need to save it ASAP before the page is ruthlessly destroyed**
+- **It is intentionally intrusive. This is to inform you that, if you have unsaved "work" in your current tab, you need to save it ASAP before the page is ruthlessly destroyed**
 - Click on it to dimiss it
 
 ![image](https://github.com/user-attachments/assets/17acefc5-1ee0-443d-b4fe-fba1c0608804)
