@@ -9,8 +9,7 @@
   
 ![image](https://github.com/leoCottret/web-plugins/assets/71428793/e2c05572-ba1e-4f2b-8bb0-35edd399dedd)
 
-- PS: The check happens every minute, so if you close and reopen a tab you can still take a glance at it
-- PPS: The "Points" is a gamification feature that isn't fully fleshed out yet, for now it's just the number of days since the installation. It's a reward for using a productivity plugin (yay!)
+- PS: The "Points" is a gamification feature that isn't fully fleshed out yet, for now it's just the number of days since the installation. It's a reward for using a productivity plugin (yay!)
 ## Adding a new rule
 - Type your website in the left field, the time in minutes in the right field, then click the + sign. The new rule will be added
 
@@ -29,6 +28,14 @@
 - Your time spent on websites will be reset at this time from now on
 
 ![image](https://github.com/user-attachments/assets/28d3ccc2-886b-434b-9738-4a4ca4c7d098)
+
+## About notifications warning
+- **When there are less than 3 minutes left on a root domain, you will get a huge pop up in your current tab that will slowly move on your screen**
+- **It is intentionnally intrusive. This is to inform you that, if you have unsaved "work" in your current tab, you need to save it ASAP before the page is ruthlessly destroyed**
+- Click on it to dimiss it
+
+![image](https://github.com/user-attachments/assets/17acefc5-1ee0-443d-b4fe-fba1c0608804)
+
 
 
 ## Extension link(s)
