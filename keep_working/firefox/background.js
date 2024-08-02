@@ -193,4 +193,24 @@ browser.storage.local.get({["keep_working_options"]: 0}).then((r) => {
 });
 
 
+browser.tabs.onActivated.addListener((tab) => {
+	if (debug) {
+		console.info('the current tab changed!', tab)
+	}
+	refreshTWW(true)
+})
+onUpdatedSlower = false
+browser.tabs.onUpdated.addListener((tab) => {
+	if (!onUpdatedSlower) {
+		onUpdatedSlower = true
+		setTimeout(() => {
+			refreshTWW(true)
+			onUpdatedSlower = false
+			if (debug) {
+				console.info('the current tab was updated!', tab)
+			}
 
+			
+		}, 1000)
+	}
+})
