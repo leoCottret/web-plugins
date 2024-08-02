@@ -24,6 +24,12 @@
   
 ![image](https://github.com/leoCottret/web-plugins/assets/71428793/835cf0ca-cffd-4859-89d2-c6c7729fb19e)
 
+## Changing the daily time when the time spent on websites are reset
+- Click on the time field, type your time, then click Save
+- Your time spent on websites will be reset at this time from now on
+![image](https://github.com/user-attachments/assets/28d3ccc2-886b-434b-9738-4a4ca4c7d098)
+
+
 ## Extension link(s)
 Get it for [firefox](https://addons.mozilla.org/en-US/firefox/addon/keep-working/)
 
