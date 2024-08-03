@@ -25,7 +25,6 @@ function killPageIfNeeded() {
 	refreshTWW();
 	setTimeout(() => {
 		for (let w of timeWasteWebsites) {
-			console.log('killPageIfNeeded')
 			if (window.location.hostname.includes(w.name)) {
 				if (w.timeCurrent >= w.timeLimit) {
 					killPage(w.timeCurrent);
