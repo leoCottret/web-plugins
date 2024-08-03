@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
     "name": "Keep Working!",
-    "version": "1.1",
+    "version": "1.1.1",
     "description": "Limit the time you can pass on websites you choose!",
     "background": {
         "scripts": ["background.js"],
